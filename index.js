@@ -4,7 +4,7 @@ var svg = d3.select("svg"),
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody().strength(-2000))
+    .force("charge", d3.forceManyBody().strength(-1000))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 d3.json("http://localhost:3000/mira", function(error, graph) {
@@ -55,7 +55,8 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
           .on("drag", dragged)
           .on("end", dragended))
           .on("click", clicked)
-  
+
+// on circle click function
   function clicked(d) {
     modal.style.display = "block"
     content.innerHTML = d.id

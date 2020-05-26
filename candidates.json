@@ -20,7 +20,8 @@
       {"source": "Candidate7", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
       {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
       {"source": "Candidate6", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
-      {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"}
+      {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
+      {"source": "Candidate8", "target": "Candidate7", "value": 60, "dependeded_value_thickness": "4"}
      
   
     ]
