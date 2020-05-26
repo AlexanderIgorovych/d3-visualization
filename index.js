@@ -10,12 +10,14 @@ var simulation = d3.forceSimulation()
 d3.json("http://localhost:3000/mira", function(error, graph) {
   if (error) throw error;
 
+// Define Connections
   var link = svg.append("g")
       .attr("class", "links")
     .selectAll("line")
     .data(graph.links)
-    .enter().append("line");
+    .enter().append("line")
 
+// Define circles
   var node = svg.append("g")
       .attr("class", "nodes")
     .selectAll("circle")
@@ -27,7 +29,7 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended))
-          .on("click", clicked);
+          .on("click", clicked)
   
   var circle2 = svg.append("g")
       .attr("class", "nodes")
@@ -39,7 +41,7 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
           .on("start", dragstarted)
           .on("drag", dragged)
           .on("end", dragended))
-          .on("click", clicked);
+          .on("click", clicked)
   
   var circle3 = svg.append("g")
       .attr("class", "nodes")
@@ -51,15 +53,16 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
       .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
-          .on("end", dragended));
+          .on("end", dragended))
+          .on("click", clicked)
   
-  function clicked(d, i) {
-    console.log(d)
-    alert('clicked' + d.id)
+  function clicked(d) {
+    modal.style.display = "block"
+    content.innerHTML = d.id
     
   }
 
-
+// Define titles inside circles
   node.append("title")
       .text(function(d) { return d.dependeded_value_third_circle; });
   circle2.append("title")
@@ -85,11 +88,11 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
     node
         .attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
-	
+
 	circle2
 		.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
-	
+
 	circle3
 		.attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
@@ -111,4 +114,25 @@ function dragended(d) {
   if (!d3.event.active) simulation.alphaTarget(0);
   d.fx = null;
   d.fy = null;
+}
+
+// Get the modal
+var modal = document.getElementById("myModal")
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0]
+
+// modal content
+var content = document.getElementsByClassName('modal-value')[0]
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+  modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+  if (event.target == modal) {
+    modal.style.display = "none";
+  }
 }
