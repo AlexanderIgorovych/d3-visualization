@@ -1,3 +1,32 @@
+// STATIC RATING DATA - REMOVE IT WHEN YOU START OBTAINING IT FROM YOUR API
+var RATING_DATA = {
+  "nodes": [
+    {"id": "Candidate1", "group": 1, "dependeded_value_first_circle": "7", "dependeded_value_second_circle":"12", "dependeded_value_third_circle":"24"},
+    {"id": "Candidate2", "group": 1, "dependeded_value_first_circle": "2", "dependeded_value_second_circle":"8", "dependeded_value_third_circle":"30"},
+    {"id": "Candidate3", "group": 1, "dependeded_value_first_circle": "10", "dependeded_value_second_circle":"18", "dependeded_value_third_circle":"20"},
+    {"id": "Candidate4", "group": 1, "dependeded_value_first_circle": "5", "dependeded_value_second_circle":"10", "dependeded_value_third_circle":"15"},
+    {"id": "Candidate5", "group": 1, "dependeded_value_first_circle": "7", "dependeded_value_second_circle":"12", "dependeded_value_third_circle":"24"},
+    {"id": "Candidate6", "group": 1, "dependeded_value_first_circle": "2", "dependeded_value_second_circle":"8", "dependeded_value_third_circle":"30"},
+    {"id": "Candidate7", "group": 1, "dependeded_value_first_circle": "10", "dependeded_value_second_circle":"18", "dependeded_value_third_circle":"20"},
+    {"id": "Candidate8", "group": 1, "dependeded_value_first_circle": "5", "dependeded_value_second_circle":"10", "dependeded_value_third_circle":"15"}
+  ],
+  "links": [
+    {"source": "Candidate2", "target": "Candidate1", "value": 10, "dependeded_value_thickness": "1"},
+    {"source": "Candidate3", "target": "Candidate1", "value": 80, "dependeded_value_thickness": "2"},
+    {"source": "Candidate4", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
+    {"source": "Candidate4", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
+    {"source": "Candidate5", "target": "Candidate1", "value": 10, "dependeded_value_thickness": "1"},
+    {"source": "Candidate5", "target": "Candidate7", "value": 80, "dependeded_value_thickness": "2"},
+    {"source": "Candidate7", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
+    {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
+    {"source": "Candidate6", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
+    {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
+    {"source": "Candidate8", "target": "Candidate7", "value": 60, "dependeded_value_thickness": "4"}
+  ]
+}
+// END OF STATIC RATING DATA
+
+
 var svg = d3.select("svg"),
     width = +svg.attr("width"),
     height = +svg.attr("height");
@@ -7,17 +36,24 @@ var simulation = d3.forceSimulation()
     .force("charge", d3.forceManyBody().strength(-1000))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
-d3.json("http://localhost:3000/mira", function(error, graph) {
+
+// REPLACE THIS CALL WITH THE COMMENTED CODE BELOW AND SET URL WHICH RETRIEVES YOUR RATINGS
+drawRatings(null, RATING_DATA);
+//d3.json("http://your.website.here/api-to-get-data", drawRatings);
+
+
+// MAIN FUNCTION TO DRAW RATINGS
+function drawRatings(error, graph) {
   if (error) throw error;
 
-// Define Connections
+  // Define Connections
   var link = svg.append("g")
       .attr("class", "links")
     .selectAll("line")
     .data(graph.links)
     .enter().append("line")
 
-// Define circles
+  // Define circles
   var node = svg.append("g")
       .attr("class", "nodes")
     .selectAll("circle")
@@ -63,11 +99,10 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
           .on("mouseover", handleMouseOver)
           .on("mouseout", handleMouseOut);
 
-// on circle click function
+  // on circle click function
   function clicked(d) {
     modal.style.display = "block"
     content.innerHTML = d.id
-    
   }
 
   function handleMouseOver(d, i, event) {  
@@ -78,7 +113,7 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
     // hide popover
   }
 
-// Define titles inside circles
+  // Define titles inside circles
   node.append("data-title")
       .text(function(d) { return d.dependeded_value_third_circle; });
   circle2.append("title")
@@ -105,15 +140,16 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
         .attr("cx", function(d) { return d.x; })
         .attr("cy", function(d) { return d.y; });
 
-	circle2
-		.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
+    circle2
+      .attr("cx", function(d) { return d.x; })
+          .attr("cy", function(d) { return d.y; });
 
-	circle3
-		.attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
+    circle3
+      .attr("cx", function(d) { return d.x; })
+          .attr("cy", function(d) { return d.y; });
   }
-});
+};
+// END OF THE MAIN FUNCTION
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
