@@ -1,30 +1,4 @@
 // STATIC RATING DATA - REMOVE IT WHEN YOU START OBTAINING IT FROM YOUR API
-var RATING_DATA_EXAMPLE = {
-  "nodes": [
-    {"id": "Candidate1", "group": 1, "dependeded_value_first_circle": "7", "dependeded_value_second_circle":"12", "dependeded_value_third_circle":"24"},
-    {"id": "Candidate2", "group": 1, "dependeded_value_first_circle": "2", "dependeded_value_second_circle":"8", "dependeded_value_third_circle":"30"},
-    {"id": "Candidate3", "group": 1, "dependeded_value_first_circle": "10", "dependeded_value_second_circle":"18", "dependeded_value_third_circle":"20"},
-    {"id": "Candidate4", "group": 1, "dependeded_value_first_circle": "5", "dependeded_value_second_circle":"10", "dependeded_value_third_circle":"15"},
-    {"id": "Candidate5", "group": 1, "dependeded_value_first_circle": "7", "dependeded_value_second_circle":"12", "dependeded_value_third_circle":"24"},
-    {"id": "Candidate6", "group": 1, "dependeded_value_first_circle": "2", "dependeded_value_second_circle":"8", "dependeded_value_third_circle":"30"},
-    {"id": "Candidate7", "group": 1, "dependeded_value_first_circle": "10", "dependeded_value_second_circle":"18", "dependeded_value_third_circle":"20"},
-    {"id": "Candidate8", "group": 1, "dependeded_value_first_circle": "5", "dependeded_value_second_circle":"10", "dependeded_value_third_circle":"15"}
-  ],
-  "links": [
-    {"source": "Candidate2", "target": "Candidate1", "value": 10, "dependeded_value_thickness": "1"},
-    {"source": "Candidate3", "target": "Candidate1", "value": 80, "dependeded_value_thickness": "2"},
-    {"source": "Candidate4", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
-    {"source": "Candidate4", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
-    {"source": "Candidate5", "target": "Candidate1", "value": 10, "dependeded_value_thickness": "1"},
-    {"source": "Candidate5", "target": "Candidate7", "value": 80, "dependeded_value_thickness": "2"},
-    {"source": "Candidate7", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
-    {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
-    {"source": "Candidate6", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
-    {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
-    {"source": "Candidate8", "target": "Candidate7", "value": 60, "dependeded_value_thickness": "4"}
-  ]
-}
-
 var RATING_DATA = {
   nodes: [
     { id: "party-1", name: "Партія 1", core: 3.0, reserve: 4.6, potential: 6.0 },
@@ -164,7 +138,7 @@ var svg = d3.select("svg"),
 
 var simulation = d3.forceSimulation()
     .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody().strength(-1000))
+    .force("charge", d3.forceManyBody().strength(-2000))
     .force("center", d3.forceCenter(width / 2, height / 2));
 
 
@@ -190,7 +164,7 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return d.potential; })
+      .attr("r", function (d) { return 2 + (d.core + d.reserve + d.potential) / 2; })
 	    .attr("fill", "black")
       .call(d3.drag()
           .on("start", dragstarted)
@@ -205,7 +179,7 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return d.reserve; })
+      .attr("r", function (d) { return 2 + (d.core + d.reserve) / 2; })
       .attr("fill", "yellow")
       .call(d3.drag()
           .on("start", dragstarted)
@@ -220,7 +194,7 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return d.core; })
+      .attr("r", function (d) { return 2 + d.core / 2; })
 	    .attr("fill", "white")
       .call(d3.drag()
           .on("start", dragstarted)
@@ -233,7 +207,7 @@ function drawRatings(error, graph) {
   // on circle click function
   function clicked(d) {
     modal.style.display = "block"
-    content.innerHTML = d.id
+    content.innerHTML = `<h1>${d.name}</h1>`;
   }
 
   function handleMouseOver(d, i, event) {  
@@ -261,7 +235,8 @@ function drawRatings(error, graph) {
 
   function ticked() {
     link
-        .attr("stroke-width", function(d){ return d.value * 5; })
+        .attr("stroke-width", function(d){ return d.value > 0 ? d.value * 2 : 1; })
+        .attr("class", function(d){ return d.value > 0 ? "" : "empty"; })
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
