@@ -30,6 +30,8 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
           .on("drag", dragged)
           .on("end", dragended))
           .on("click", clicked)
+          .on("mouseover", handleMouseOver)
+          .on("mouseout", handleMouseOut);
   
   var circle2 = svg.append("g")
       .attr("class", "nodes")
@@ -43,6 +45,8 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
           .on("drag", dragged)
           .on("end", dragended))
           .on("click", clicked)
+          .on("mouseover", handleMouseOver)
+          .on("mouseout", handleMouseOut);
   
   var circle3 = svg.append("g")
       .attr("class", "nodes")
@@ -56,6 +60,8 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
           .on("drag", dragged)
           .on("end", dragended))
           .on("click", clicked)
+          .on("mouseover", handleMouseOver)
+          .on("mouseout", handleMouseOut);
 
 // on circle click function
   function clicked(d) {
@@ -64,8 +70,16 @@ d3.json("http://localhost:3000/mira", function(error, graph) {
     
   }
 
+  function handleMouseOver(d, i, event) {  
+    // show popover
+  }
+
+  function handleMouseOut(d, i, event) {
+    // hide popover
+  }
+
 // Define titles inside circles
-  node.append("title")
+  node.append("data-title")
       .text(function(d) { return d.dependeded_value_third_circle; });
   circle2.append("title")
       .text(function(d) { return d.dependeded_value_second_circle; });
