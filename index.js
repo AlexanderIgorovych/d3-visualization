@@ -1,5 +1,5 @@
 // STATIC RATING DATA - REMOVE IT WHEN YOU START OBTAINING IT FROM YOUR API
-var RATING_DATA = {
+var RATING_DATA_EXAMPLE = {
   "nodes": [
     {"id": "Candidate1", "group": 1, "dependeded_value_first_circle": "7", "dependeded_value_second_circle":"12", "dependeded_value_third_circle":"24"},
     {"id": "Candidate2", "group": 1, "dependeded_value_first_circle": "2", "dependeded_value_second_circle":"8", "dependeded_value_third_circle":"30"},
@@ -22,6 +22,16 @@ var RATING_DATA = {
     {"source": "Candidate6", "target": "Candidate1", "value": 0, "dependeded_value_thickness": "3"},
     {"source": "Candidate8", "target": "Candidate3", "value": 60, "dependeded_value_thickness": "4"},
     {"source": "Candidate8", "target": "Candidate7", "value": 60, "dependeded_value_thickness": "4"}
+  ]
+}
+
+var RATING_DATA = {
+  nodes: [
+    { id: "party-1", name: "Партія 1", core: 3.0, reserve: 4.6, potential: 6.0 },
+    { id: "party-2", name: "Партія 2", core: 7.6, reserve: 16.5, potential: 25.5 },
+  ],
+  links: [
+    { source: "party-1", target: "party-2", value: 0.7 },
   ]
 }
 // END OF STATIC RATING DATA
@@ -59,8 +69,8 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return d.dependeded_value_third_circle; })
-	  .attr("fill", "black")
+      .attr("r", function (d) { return d.potential; })
+	    .attr("fill", "black")
       .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
@@ -74,7 +84,7 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return d.dependeded_value_second_circle; })
+      .attr("r", function (d) { return d.reserve; })
       .attr("fill", "yellow")
       .call(d3.drag()
           .on("start", dragstarted)
@@ -89,8 +99,8 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return d.dependeded_value_first_circle; })
-	  .attr("fill", "white")
+      .attr("r", function (d) { return d.core; })
+	    .attr("fill", "white")
       .call(d3.drag()
           .on("start", dragstarted)
           .on("drag", dragged)
@@ -115,11 +125,11 @@ function drawRatings(error, graph) {
 
   // Define titles inside circles
   node.append("data-title")
-      .text(function(d) { return d.dependeded_value_third_circle; });
+      .text(function(d) { return d.potential; });
   circle2.append("title")
-      .text(function(d) { return d.dependeded_value_second_circle; });
+      .text(function(d) { return d.reserve; });
   circle3.append("title")
-      .text(function(d) { return d.dependeded_value_first_circle; });
+      .text(function(d) { return d.core; });
 
   simulation
       .nodes(graph.nodes)
@@ -130,7 +140,7 @@ function drawRatings(error, graph) {
 
   function ticked() {
     link
-        .attr("stroke-width", function(d){ return d.dependeded_value_thickness; })
+        .attr("stroke-width", function(d){ return d.value * 5; })
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
