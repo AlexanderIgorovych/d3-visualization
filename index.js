@@ -41,10 +41,10 @@ var RATING_DATA = {
     { id: "party-12", name: "Партія 12", core: 0.4, reserve: 0.4, potential: 1.6 },
     { id: "party-13", name: "Партія 13", core: 4.6, reserve: 9.7, potential: 10.5 },
     { id: "party-14", name: "Партія 14", core: 3.1, reserve: 3.1, potential: 5.1 },
-    { id: "party-15", name: "Партія 15", core: 1.6, reserve: 1.6, potential: 3.2 },
-    { id: "party-16", name: "Партія 16", core: 0.3, reserve: 0.3, potential: 0.3 },
+/*     { id: "party-15", name: "Партія 15", core: 1.6, reserve: 1.6, potential: 3.2 },
+    { id: "party-16", name: "Партія 16", core: 0.3, reserve: 0.3, potential: 0.3 }, */
     { id: "party-17", name: "Проти всіх", core: 0.0, reserve: 0.4, potential: 0.4 },
-    { id: "party-18", name: "Не відповіли", core: 0.0, reserve: 0.8, potential: 0.8 },
+ /*    { id: "party-18", name: "Не відповіли", core: 0.0, reserve: 0.8, potential: 0.8 }, */
   ],
   links: [
     { source: "party-1", target: "party-2", value: 0.7 },
@@ -61,7 +61,6 @@ var RATING_DATA = {
     { source: "party-1", target: "party-13", value: 0.0 },
     { source: "party-1", target: "party-14", value: 0.0 },
     { source: "party-1", target: "party-17", value: 0.0 },
-    { source: "party-1", target: "party-18", value: 0.0 },
     { source: "party-2", target: "party-3", value: 0.8 },
     { source: "party-2", target: "party-4", value: 4.2 },
     { source: "party-2", target: "party-5", value: 0.0 },
@@ -149,7 +148,7 @@ var RATING_DATA = {
     { source: "party-11", target: "party-17", value: 0.0 },
     { source: "party-12", target: "party-13", value: 0.0 },
     { source: "party-12", target: "party-14", value: 0.0 },
-    { source: "party-12", target: "party-17", value: 0.0 },
+    { source: "party-12", target: "party-17", value: 0.0 },/*  */
     { source: "party-13", target: "party-14", value: 0.0 },
     { source: "party-13", target: "party-17", value: 0.0 },
     { source: "party-14", target: "party-14", value: 0.0 },
