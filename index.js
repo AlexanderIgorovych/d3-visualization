@@ -15,10 +15,10 @@ var RATING_DATA = {
     { id: "party-12", name: "Партія 12", core: 0.4, reserve: 0.4, potential: 1.6 },
     { id: "party-13", name: "Партія 13", core: 4.6, reserve: 9.7, potential: 10.5 },
     { id: "party-14", name: "Партія 14", core: 3.1, reserve: 3.1, potential: 5.1 },
-/*     { id: "party-15", name: "Партія 15", core: 1.6, reserve: 1.6, potential: 3.2 },
-    { id: "party-16", name: "Партія 16", core: 0.3, reserve: 0.3, potential: 0.3 }, */
+    /*     { id: "party-15", name: "Партія 15", core: 1.6, reserve: 1.6, potential: 3.2 },
+        { id: "party-16", name: "Партія 16", core: 0.3, reserve: 0.3, potential: 0.3 }, */
     { id: "party-17", name: "Проти всіх", core: 0.0, reserve: 0.4, potential: 0.4 },
- /*    { id: "party-18", name: "Не відповіли", core: 0.0, reserve: 0.8, potential: 0.8 }, */
+    /*    { id: "party-18", name: "Не відповіли", core: 0.0, reserve: 0.8, potential: 0.8 }, */
   ],
   links: [
     { source: "party-1", target: "party-2", value: 0.7 },
@@ -131,15 +131,15 @@ var RATING_DATA = {
 }
 // END OF STATIC RATING DATA
 
-
 var svg = d3.select("svg"),
-    width = +svg.attr("width"),
-    height = +svg.attr("height");
+  width = +svg.attr("width"),
+  height = +svg.attr("height");
+
 
 var simulation = d3.forceSimulation()
-    .force("link", d3.forceLink().id(function(d) { return d.id; }))
-    .force("charge", d3.forceManyBody().strength(-2000))
-    .force("center", d3.forceCenter(width / 2, height / 2));
+  .force("link", d3.forceLink().id(function (d) { return d.id; }))
+  .force("charge", d3.forceManyBody().strength(-2000))
+  .force("center", d3.forceCenter(width / 2, height / 2));
 
 
 // REPLACE THIS CALL WITH THE COMMENTED CODE BELOW AND SET URL WHICH RETRIEVES YOUR RATINGS
@@ -153,51 +153,63 @@ function drawRatings(error, graph) {
 
   // Define Connections
   var link = svg.append("g")
-      .attr("class", "links")
+    .attr("class", "links")
     .selectAll("line")
     .data(graph.links)
     .enter().append("line")
 
   // Define circles
   var node = svg.append("g")
-      .attr("class", "nodes")
+    .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return 2 + (d.core + d.reserve + d.potential) / 2; })
-	    .attr("fill", "black")
-      .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended))
-          .on("click", clicked)
-  
+    .attr("r", function (d) { return 2 + (d.core + d.reserve + d.potential) / 2; })
+    .attr("fill", "black")
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+    .on("click", clicked)
+
+
   var circle2 = svg.append("g")
-      .attr("class", "nodes")
+    .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return 2 + (d.core + d.reserve) / 2; })
-      .attr("fill", "yellow")
-      .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended))
-          .on("click", clicked)
-  
+    .attr("r", function (d) { return 2 + (d.core + d.reserve) / 2; })
+    .attr("fill", "yellow")
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+    .on("click", clicked)
+
   var circle3 = svg.append("g")
-      .attr("class", "nodes")
+    .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-      .attr("r", function (d) { return 2 + d.core / 2; })
-	    .attr("fill", "white")
-      .call(d3.drag()
-          .on("start", dragstarted)
-          .on("drag", dragged)
-          .on("end", dragended))
-          .on("click", clicked)
-  
+    .attr("r", function (d) { return 2 + d.core / 2; })
+    .attr("fill", "white")
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+    .on("click", clicked)
+
+  link.append("title")
+    .text(function (d) { return d.value > 0 ? d.value + "%" : null; })
+  node.append("title")
+    .text(function (d) { return d.name; })
+  circle2.append("title")
+    .text(function (d) { return d.name; })
+
+  circle3.append("title")
+    .text(function (d) { return d.name; })
+    .style("font-size", "25px")
+
   // on circle click function
   function clicked(d, i, event) {
     modal.style.display = "block"
@@ -212,33 +224,34 @@ function drawRatings(error, graph) {
                           </div>`
   }
 
+
   simulation
-      .nodes(graph.nodes)
-      .on("tick", ticked);
+    .nodes(graph.nodes)
+    .on("tick", ticked);
 
   simulation.force("link")
-      .links(graph.links);
+    .links(graph.links);
 
   function ticked() {
     link
-        .attr("stroke-width", function(d){ return d.value > 0 ? d.value * 2 : 1; })
-        .attr("class", function(d) { return d.value > 0 ? "" : "empty"; })
-        .attr("x1", function(d) { return d.source.x; })
-        .attr("y1", function(d) { return d.source.y; })
-        .attr("x2", function(d) { return d.target.x; })
-        .attr("y2", function(d) { return d.target.y; });
+      .attr("stroke-width", function (d) { return d.value > 0 ? d.value * 2 : 1; })
+      .attr("class", function (d) { return d.value > 0 ? "" : "empty"; })
+      .attr("x1", function (d) { return d.source.x; })
+      .attr("y1", function (d) { return d.source.y; })
+      .attr("x2", function (d) { return d.target.x; })
+      .attr("y2", function (d) { return d.target.y; });
 
     node
-        .attr("cx", function(d) { return d.x; })
-        .attr("cy", function(d) { return d.y; });
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function (d) { return d.y; });
 
     circle2
-      .attr("cx", function(d) { return d.x; })
-          .attr("cy", function(d) { return d.y; });
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function (d) { return d.y; });
 
     circle3
-      .attr("cx", function(d) { return d.x; })
-      .attr("cy", function(d) { return d.y; })
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function (d) { return d.y; })
   }
 }
 // END OF THE MAIN FUNCTION
@@ -270,6 +283,6 @@ var span = document.getElementsByClassName("close")[0]
 var content = document.getElementsByClassName('modal-value')[0]
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function() {
+span.onclick = function () {
   modal.style.display = "none";
 }
