@@ -1,103 +1,118 @@
 <!DOCTYPE html>
 <html lang="ua">
+
   <head>
     <meta content="text/html" charset="utf-8">
     <title>D3 visualisation</title>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-  <style>
-    .links line {
-      stroke: #333;
-    }
-    .links line.empty {
-      stroke: #ddd;
-    }
-    
-    .nodes circle {
-      pointer-events: all;
-      stroke: none;
-    }
+    <style>
+      .links line {
+        stroke: #333;
+      }
+
+      .links line.empty {
+        stroke: #ddd;
+      }
+
+      .nodes circle {
+        pointer-events: all;
+        stroke: none;
+      }
+
       /* The Modal (background) */
-    .modal {
-      display: none;
-      z-index: 1;
-      width: 190px; 
-      height: fit-content; 
-    }
-    .modal:before {
-      content: ' ';
-      height: 0;
-      position: absolute;
-      width: 0;
-      left: -20px;
-      border: 10px solid transparent;
-      border-right-color:#fffffc;
-    }
+      .modal {
+        display: none;
+        z-index: 1;
+        width: 190px;
+        height: fit-content;
+        border: solid grey 1px;
+      }
 
-    /* Modal Content */
-    .modal-content {
-      background-color: #fffffc;
-      margin: auto;
-      padding: 0 10px;
-    }
+      .modal:before {
+        content: ' ';
+        height: 0;
+        position: absolute;
+        width: 0;
+        left: -20px;
+        border: 10px solid transparent;
+        border-right-color: #fffffc;
+      }
 
-    /* The Close Button */
-    .close {
-      color: #aaaaaa;
-      float: right;
-      font-size: 28px;
-      font-weight: bold;
-    }
+      /* Modal Content */
+      .modal-content {
+        background-color: #fffffc;
+        margin: auto;
+        padding: 0 10px;
+      }
 
-    .close:hover,
-    .close:focus {
-      color: #000;
-      text-decoration: none;
-      cursor: pointer;
-    }
-    .description{
-      right: 0;
-      position: absolute;
-      width: fit-content;
-      display: flex;
-      justify-content: flex-end;
-    }
-    .popover-content{
-      display: flex;
-      flex-direction: column;
-    }
-     .pop-list{
-      display: flex;
-      align-items: center;
-    }
-    .popover-content p{
+      /* The Close Button */
+      .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+      }
+
+      .close:hover,
+      .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      .description {
+        right: 0;
+        position: absolute;
+        width: fit-content;
+        display: flex;
+        justify-content: flex-end;
+      }
+
+      .popover-content {
+        display: flex;
+        flex-direction: column;
+      }
+
+      .pop-list {
+        display: flex;
+        align-items: center;
+      }
+
+      .popover-content p {
         margin: 5px;
       }
-      .popover-content div a{
+
+      .popover-content div a {
         margin: 5px;
       }
-    .popover-title{
-      text-align: center;
-      font-size: 20px;
-    }
-    .point-core{
-      color: #e8e8e8 ;
-      font-size: 40px; 
-      line-height: 10px
-    }
-    .point-reserve{
-      color: yellow ;
-      font-size: 40px; 
-      line-height: 10px
-    }
-    .point-potential{
-      color:black ;
-      font-size: 40px; 
-      line-height: 10px
-    }
-  </style>
+
+      .popover-title {
+        text-align: center;
+        font-size: 20px;
+      }
+
+      .point-core {
+        color: #e8e8e8;
+        font-size: 40px;
+        line-height: 10px
+      }
+
+      .point-reserve {
+        color: yellow;
+        font-size: 40px;
+        line-height: 10px
+      }
+
+      .point-potential {
+        color: black;
+        font-size: 40px;
+        line-height: 10px
+      }
+    </style>
 
   </head>
+
   <body>
     <div class="description">
       <div class="pop-list">
@@ -114,9 +129,9 @@
       </div>
       <div class="pop-list">
         <span class="material-icons">
-        info
+          info
         </span></div>
-      </div>
+    </div>
     <svg width="960" height="600"></svg>
     <!-- The Modal -->
     <div id="myModal" class="modal">
@@ -125,11 +140,10 @@
       <div class="modal-content">
         <span class="close">&times;</span>
         <div class="modal-value">Some text in the Modal..<div>
-      </div>
-    </div>
-    <script src="https://d3js.org/d3.v4.min.js"></script>
-    <script src="./index.js"></script>
+          </div>
+        </div>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+        <script src="./index.js"></script>
   </body>
-  
-</html>
 
+</html>
