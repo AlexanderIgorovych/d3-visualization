@@ -122,7 +122,7 @@ var RATING_DATA = {
     { source: "party-11", target: "party-17", value: 0.0 },
     { source: "party-12", target: "party-13", value: 0.0 },
     { source: "party-12", target: "party-14", value: 0.0 },
-    { source: "party-12", target: "party-17", value: 0.0 },/*  */
+    { source: "party-12", target: "party-17", value: 0.0 },
     { source: "party-13", target: "party-14", value: 0.0 },
     { source: "party-13", target: "party-17", value: 0.0 },
     { source: "party-14", target: "party-14", value: 0.0 },
@@ -171,8 +171,6 @@ function drawRatings(error, graph) {
           .on("drag", dragged)
           .on("end", dragended))
           .on("click", clicked)
-          .on("mouseover", handleMouseOver)
-          .on("mouseout", handleMouseOut);
   
   var circle2 = svg.append("g")
       .attr("class", "nodes")
@@ -186,8 +184,6 @@ function drawRatings(error, graph) {
           .on("drag", dragged)
           .on("end", dragended))
           .on("click", clicked)
-          .on("mouseover", handleMouseOver)
-          .on("mouseout", handleMouseOut);
   
   var circle3 = svg.append("g")
       .attr("class", "nodes")
@@ -201,30 +197,20 @@ function drawRatings(error, graph) {
           .on("drag", dragged)
           .on("end", dragended))
           .on("click", clicked)
-          .on("mouseover", handleMouseOver)
-          .on("mouseout", handleMouseOut);
-
+  
   // on circle click function
-  function clicked(d) {
+  function clicked(d, i, event) {
     modal.style.display = "block"
-    content.innerHTML = `<h1>${d.name}</h1>`;
+    modal.style.position = "absolute"
+    modal.style.top = `${event[i].attributes.cy.value + 10}px`
+    modal.style.left = `${event[i].attributes.cx.value - -20}px`
+    content.innerHTML = ` <div class="popover-content">
+                            <p class="popover-title">${d.name}</p>
+                            <div class="pop-list"><a class="point-core">•</a><a>Ядро - ${d.core}</a></div>
+                            <div class="pop-list"><a class="point-reserve">•</a><a> Резерв - ${d.reserve}</a></div>
+                            <div class="pop-list"><a class="point-potential">•</a><a> Потенціал - ${d.potential}</a></div>
+                          </div>`
   }
-
-  function handleMouseOver(d, i, event) {  
-    // show popover
-  }
-
-  function handleMouseOut(d, i, event) {
-    // hide popover
-  }
-
-  // Define titles inside circles
-  node.append("data-title")
-      .text(function(d) { return d.potential; });
-  circle2.append("title")
-      .text(function(d) { return d.reserve; });
-  circle3.append("title")
-      .text(function(d) { return d.core; });
 
   simulation
       .nodes(graph.nodes)
@@ -236,7 +222,7 @@ function drawRatings(error, graph) {
   function ticked() {
     link
         .attr("stroke-width", function(d){ return d.value > 0 ? d.value * 2 : 1; })
-        .attr("class", function(d){ return d.value > 0 ? "" : "empty"; })
+        .attr("class", function(d) { return d.value > 0 ? "" : "empty"; })
         .attr("x1", function(d) { return d.source.x; })
         .attr("y1", function(d) { return d.source.y; })
         .attr("x2", function(d) { return d.target.x; })
@@ -252,9 +238,9 @@ function drawRatings(error, graph) {
 
     circle3
       .attr("cx", function(d) { return d.x; })
-          .attr("cy", function(d) { return d.y; });
+      .attr("cy", function(d) { return d.y; })
   }
-};
+}
 // END OF THE MAIN FUNCTION
 
 function dragstarted(d) {
@@ -286,11 +272,4 @@ var content = document.getElementsByClassName('modal-value')[0]
 // When the user clicks on <span> (x), close the modal
 span.onclick = function() {
   modal.style.display = "none";
-}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-  if (event.target == modal) {
-    modal.style.display = "none";
-  }
 }
