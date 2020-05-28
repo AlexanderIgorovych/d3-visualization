@@ -288,3 +288,9 @@ var content = document.getElementsByClassName('modal-value')[0]
 span.onclick = function () {
   modal.style.display = "none";
 }
+
+window.onclick = function(event) {
+  if(event.target.localName !== "circle") {
+    modal.style.display = "none";
+  }
+}
