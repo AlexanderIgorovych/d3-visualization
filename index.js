@@ -130,8 +130,11 @@ var RATING_DATA = {
   ]
 }
 // END OF STATIC RATING DATA
+var svgWrapper = document.getElementsByClassName("svg-wrapper")
 
-var svg = d3.select("svg"),
+var svg = d3.select("svg")
+  .attr("width", svgWrapper[0].clientWidth)
+  .attr("height", svgWrapper[0].clientHeight),
   width = +svg.attr("width"),
   height = +svg.attr("height");
 
