@@ -134,7 +134,15 @@ var svgWrapper = document.getElementsByClassName("svg-wrapper")
 
 var svg = d3.select("svg")
   .attr("width", svgWrapper[0].clientWidth)
+  .attr("height", svgWrapper[0].clientHeight)
+  // COde for zoom
+  .call(d3.zoom().on("zoom", function () {
+       svg.attr("transform", d3.event.transform)
+    }))
+  .append("g")
+  .attr("width", svgWrapper[0].clientWidth)
   .attr("height", svgWrapper[0].clientHeight),
+  // end codeo for zoom
   width = +svg.attr("width"),
   height = +svg.attr("height");
 
