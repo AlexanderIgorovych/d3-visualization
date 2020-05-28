@@ -208,16 +208,13 @@ function drawRatings(error, graph) {
     .text(function (d) { return d.name; })
   circle2.append("title")
     .text(function (d) { return d.name; })
-
   circle3.append("title")
     .text(function (d) { return d.name; })
-    .style("font-size", "25px")
 
   // on circle click function
   function clicked(d, i, event) {
     modal.style.display = "block"
-    modal.style.position = "absolute"
-    modal.style.top = `${event[i].attributes.cy.value + 10}px`
+    modal.style.top = `${event[i].attributes.cy.value - 9}px`
     modal.style.left = `${event[i].attributes.cx.value - -20}px`
     content.innerHTML = ` <div class="popover-content">
                             <p class="popover-title">${d.name}</p>
@@ -261,6 +258,7 @@ function drawRatings(error, graph) {
 
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
+  d3.select(this).classed("moving", true);
   d.fx = d.x;
   d.fy = d.y;
 }
@@ -272,6 +270,7 @@ function dragged(d) {
 
 function dragended(d) {
   if (!d3.event.active) simulation.alphaTarget(0);
+  d3.select(this).classed("moving", false);
   d.fx = null;
   d.fy = null;
 }
