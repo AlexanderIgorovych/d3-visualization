@@ -220,10 +220,10 @@ function drawRatings(error, graph) {
     .text(function (d) { return d.name; })
 
   // on circle click function
-  function clicked(d, i, event) {
+  function clicked(d) {
     modal.style.display = "block"
-    modal.style.top = `${event[i].attributes.cy.value - 9}px`
-    modal.style.left = `${event[i].attributes.cx.value - -20}px`
+    modal.style.top = `${d3.event.clientY - 15 }px`
+    modal.style.left = `${d3.event.clientX - -10 }px`
     content.innerHTML = ` <div class="popover-content">
                             <p class="popover-title">${d.name}</p>
                             <div class="pop-list"><a class="point-core">•</a><a>Ядро - ${d.core}</a></div>
@@ -301,4 +301,5 @@ window.onclick = function(event) {
   if(event.target.localName !== "circle") {
     modal.style.display = "none";
   }
+ 
 }
