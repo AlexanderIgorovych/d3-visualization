@@ -149,7 +149,7 @@ var svgStatic = d3.select("svg")
   
 var svg = svgStatic.append("g")
   .attr("width", svgWrapper[0].clientWidth)
-  .attr("height", svgWrapper[0].clientHeight)
+  .attr("height", svgWrapper[0].clientHeight),
   
 
 width = +svgStatic.attr("width"),
@@ -284,6 +284,8 @@ function clicked(d) {
   modal.style.display = "block"
   modal.style.top = `${d3.event.clientY - 15}px`
   modal.style.left = `${d3.event.clientX - -10}px`
+  modal.style.background = "white"
+  modal.style.color = "black"
   content.innerHTML = ` <div class="popover-content">
                           <p class="popover-title">${d.name}</p>
                           <div class="pop-list"><a class="point-core">•</a><a>Ядро - ${d.core}</a></div>
@@ -303,6 +305,8 @@ function defaultZoom() {
 // Get the modal
 var modal = document.getElementById("myModal")
 
+var legend = document.getElementById("legend")
+
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0]
 
@@ -315,8 +319,19 @@ span.onclick = function () {
 }
 
 window.onclick = function(event) {
-  if(event.target.localName !== "circle") {
+  if(event.target.localName !== "circle" && event.target.localName !== "span") {
     modal.style.display = "none";
+    legend.style.display = "none"
   }
  
+}
+
+var info = document.getElementsByClassName("info")[0]
+
+info.onclick = function () {
+  legend.style.display = "block"
+  legend.style.top = `40px`
+  legend.style.right = `2px`
+  legend.style.background = "#282825"
+  legend.style.color = "#d5d5d5"
 }

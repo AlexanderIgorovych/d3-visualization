@@ -35,6 +35,14 @@
         background-color: #fcfcfc;
         position: absolute;
       }
+      .legend{
+        display: none;
+        z-index: 1;
+        width: 190px;
+        height: fit-content;
+        background-color: #fcfcfc;
+        position: absolute;
+      }
 
       .modal:before {
         content: ' ';
@@ -46,6 +54,18 @@
         border-bottom: solid grey 1px;
         border-left: solid grey 1px;
         background-color: #fcfcfc;
+        transform: rotate(45deg);
+        position: absolute;
+      }
+
+      .legend:before {
+        content: ' ';
+        display: block;
+        height: 12px;
+        width: 12px;
+        left: 175px;
+        top: -6px;
+        background-color: #282825;
         transform: rotate(45deg);
         position: absolute;
       }
@@ -83,6 +103,8 @@
         bottom: 0;
         right: 0;
         position: absolute;
+        display: flex;
+        align-items: center;
       }
 
       .popover-content {
@@ -145,8 +167,8 @@
         <a class="point-potential">•</a>
         <a> Потенціал </a>
       </div>
-      <div class="pop-list">
-        <span class="material-icons">
+      <div class="pop-list" >
+        <span id="info" class="material-icons info">
           info
         </span>
       </div>
@@ -167,7 +189,23 @@
       </div>
     </div>
 
-    <button class="default-zoom" onclick="defaultZoom()">Відновити</button>
+    <div id="legend" class="legend">
+      <div class="modal-content">
+        <div class="modal-value">
+          <div class="popover-content">
+            <div class="pop-list"><a>Ядро - Опис</a></div>
+            <div class="pop-list"><a> Резерв - Опис</a></div>
+            <div class="pop-list"><a> Потенціал - Опис</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <button class="default-zoom" onclick="defaultZoom()"> 
+      <span class="material-icons">
+        settings_backup_restore
+      </span>Відновити
+    </button>
 
     <script src="https://d3js.org/d3.v4.min.js"></script>
     <script src="./index.js"></script>
