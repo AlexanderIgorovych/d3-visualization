@@ -281,15 +281,15 @@ function dragended(d) {
 
 // on circle click function
 function clicked(d) {
-    modal.style.display = "block"
-    modal.style.top = `${d3.event.clientY - 15}px`
-    modal.style.left = `${d3.event.clientX - -10}px`
-    content.innerHTML = ` <div class="popover-content">
-                            <p class="popover-title">${d.name}</p>
-                            <div class="pop-list"><a class="point-core">•</a><a>Ядро - ${d.core}</a></div>
-                            <div class="pop-list"><a class="point-reserve">•</a><a> Резерв - ${d.reserve}</a></div>
-                            <div class="pop-list"><a class="point-potential">•</a><a> Потенціал - ${d.potential}</a></div>
-                          </div>`
+  modal.style.display = "block"
+  modal.style.top = `${d3.event.clientY - 15}px`
+  modal.style.left = `${d3.event.clientX - -10}px`
+  content.innerHTML = ` <div class="popover-content">
+                          <p class="popover-title">${d.name}</p>
+                          <div class="pop-list"><a class="point-core">•</a><a>Ядро - ${d.core}</a></div>
+                          <div class="pop-list"><a class="point-reserve">•</a><a> Резерв - ${d.reserve}</a></div>
+                          <div class="pop-list"><a class="point-potential">•</a><a> Потенціал - ${d.potential}</a></div>
+                        </div>`
 }
 
 // restore default zoom
@@ -318,4 +318,5 @@ window.onclick = function(event) {
   if(event.target.localName !== "circle") {
     modal.style.display = "none";
   }
+ 
 }
