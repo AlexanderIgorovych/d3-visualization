@@ -130,21 +130,30 @@ var RATING_DATA = {
   ]
 }
 // END OF STATIC RATING DATA
+
+
+// ============================================================
+function zooming() {
+  modal.style.display = "none";
+  svg.attr("transform", d3.event.transform);
+}
+
+var zoom = d3.zoom().on("zoom", zooming);
+
 var svgWrapper = document.getElementsByClassName("svg-wrapper")
 
-var svg = d3.select("svg")
+var svgStatic = d3.select("svg")
   .attr("width", svgWrapper[0].clientWidth)
   .attr("height", svgWrapper[0].clientHeight)
-  // COde for zoom
-  .call(d3.zoom().on("zoom", function () {
-       svg.attr("transform", d3.event.transform)
-    }))
-  .append("g")
+  .call(zoom)
+  
+var svg = svgStatic.append("g")
   .attr("width", svgWrapper[0].clientWidth)
-  .attr("height", svgWrapper[0].clientHeight),
-  // end codeo for zoom
-  width = +svg.attr("width"),
-  height = +svg.attr("height");
+  .attr("height", svgWrapper[0].clientHeight)
+  
+
+width = +svgStatic.attr("width"),
+height = +svgStatic.attr("height");
 
 
 var simulation = d3.forceSimulation()
@@ -219,20 +228,6 @@ function drawRatings(error, graph) {
   circle3.append("title")
     .text(function (d) { return d.name; })
 
-  // on circle click function
-  function clicked(d, i, event) {
-    modal.style.display = "block"
-    modal.style.top = `${event[i].attributes.cy.value - 9}px`
-    modal.style.left = `${event[i].attributes.cx.value - -20}px`
-    content.innerHTML = ` <div class="popover-content">
-                            <p class="popover-title">${d.name}</p>
-                            <div class="pop-list"><a class="point-core">•</a><a>Ядро - ${d.core}</a></div>
-                            <div class="pop-list"><a class="point-reserve">•</a><a> Резерв - ${d.reserve}</a></div>
-                            <div class="pop-list"><a class="point-potential">•</a><a> Потенціал - ${d.potential}</a></div>
-                          </div>`
-  }
-
-
   simulation
     .nodes(graph.nodes)
     .on("tick", ticked);
@@ -267,6 +262,7 @@ function drawRatings(error, graph) {
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
   d3.select(this).classed("moving", true);
+  modal.style.display = "none";
   d.fx = d.x;
   d.fy = d.y;
 }
@@ -281,6 +277,27 @@ function dragended(d) {
   d3.select(this).classed("moving", false);
   d.fx = null;
   d.fy = null;
+}
+
+// on circle click function
+function clicked(d) {
+    modal.style.display = "block"
+    modal.style.top = `${d3.event.clientY - 15}px`
+    modal.style.left = `${d3.event.clientX - -10}px`
+    content.innerHTML = ` <div class="popover-content">
+                            <p class="popover-title">${d.name}</p>
+                            <div class="pop-list"><a class="point-core">•</a><a>Ядро - ${d.core}</a></div>
+                            <div class="pop-list"><a class="point-reserve">•</a><a> Резерв - ${d.reserve}</a></div>
+                            <div class="pop-list"><a class="point-potential">•</a><a> Потенціал - ${d.potential}</a></div>
+                          </div>`
+}
+
+// restore default zoom
+function defaultZoom() {
+  svgStatic.transition().duration(500).call(
+    zoom.transform,
+    d3.zoomIdentity
+  );
 }
 
 // Get the modal

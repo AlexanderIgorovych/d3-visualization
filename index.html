@@ -15,7 +15,7 @@
       }
 
       .nodes circle {
-        cursor: grab;
+        cursor: pointer;
         pointer-events: all;
         stroke: none;
       }
@@ -79,6 +79,12 @@
         justify-content: flex-end;
       }
 
+      .default-zoom {
+        bottom: 0;
+        right: 0;
+        position: absolute;
+      }
+
       .popover-content {
         display: flex;
         flex-direction: column;
@@ -125,6 +131,7 @@
   </head>
 
   <body>
+    <!-- Legend -->
     <div class="description">
       <div class="pop-list">
         <a class="point-core">•</a>
@@ -141,22 +148,29 @@
       <div class="pop-list">
         <span class="material-icons">
           info
-        </span></div>
+        </span>
+      </div>
     </div>
+
+    <!-- SVG -->
     <div class="svg-wrapper" style="width: 97vw; height: 97vh;">
       <svg></svg>
     </div>
+
     <!-- The Modal -->
     <div id="myModal" class="modal">
-
-      <!-- Modal content -->
       <div class="modal-content">
         <span class="close">&times;</span>
         <div class="modal-value">Some text in the Modal..<div>
           </div>
         </div>
-        <script src="https://d3js.org/d3.v4.min.js"></script>
-        <script src="./index.js"></script>
+      </div>
+    </div>
+
+    <button class="default-zoom" onclick="defaultZoom()">Відновити</button>
+
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+    <script src="./index.js"></script>
   </body>
 
 </html>
