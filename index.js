@@ -292,13 +292,19 @@ function clicked(d) {
                           <div class="pop-list"><a class="point-potential">•</a><a> Потенціал - ${d.potential}</a></div>
                         </div>`
   if(window.innerWidth - d3.event.clientX > 200) {
-    modal.style.top = `${d3.event.clientY - 15}px`
     modal.style.left = `${d3.event.clientX - -10}px`
     d3.select("#myModal").classed("left-popup", false)
-  } else {
-    modal.style.top = `${d3.event.clientY - 15}px`
+  } 
+  else {
     modal.style.left = `${d3.event.clientX - 200}px`
     d3.select("#myModal").classed("left-popup", true)
+  }
+  if(window.innerHeight - d3.event.clientY > 150) {
+    modal.style.top = `${d3.event.clientY - 15}px`
+    d3.select("#myModal").classed("bottom-popup", false)
+  } else {
+    modal.style.top = `${d3.event.clientY - 140}px`
+    d3.select("#myModal").classed("bottom-popup", true)
   }
   modal.style.display = "block"
   
