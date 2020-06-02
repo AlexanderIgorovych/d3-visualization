@@ -21,13 +21,17 @@
         cursor: pointer;
         pointer-events: all;
         stroke: none;
+        position: relative;
       }
       .nodes circle.moving {
         cursor: grabbing;
         pointer-events: all;
         stroke: none;
       }
-
+      /* Need add styles for scale */
+      .scaled{
+        opacity: 0.7;
+      }
       /* The Modal (background) */
       .modal {
         display: none;
@@ -42,7 +46,7 @@
       .legend{
         display: none;
         z-index: 1;
-        width: 143px;
+        width: 146px;
         height: fit-content;
         background-color: #fcfcfc;
         position: absolute;
@@ -63,12 +67,16 @@
         position: absolute;
       }
 
+      .modal.left-popup::before{
+        left: 185px;
+        transform: rotate(-135deg);
+      }
       .legend:before {
         content: ' ';
         display: block;
         height: 12px;
         width: 12px;
-        left: 175px;
+        left: 148px;
         top: -6px;
         background-color: #282825;
         transform: rotate(45deg);
@@ -204,7 +212,7 @@
 
     <div id="legend" class="legend">
       <div class="modal-content">
-        <div class="modal-value">
+        <div>
           <div class="popover-content">
             <div class="pop-list"><a>Ядро - Опис</a></div>
             <div class="pop-list"><a> Резерв - Опис</a></div>

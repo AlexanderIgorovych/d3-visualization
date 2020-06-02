@@ -161,7 +161,6 @@ var simulation = d3.forceSimulation()
   .force("charge", d3.forceManyBody().strength(-2000))
   .force("center", d3.forceCenter(width / 2, height / 2));
 
-
 // REPLACE THIS CALL WITH THE COMMENTED CODE BELOW AND SET URL WHICH RETRIEVES YOUR RATINGS
 drawRatings(null, RATING_DATA);
 //d3.json("http://your.website.here/api-to-get-data", drawRatings);
@@ -184,13 +183,15 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-    .attr("r", function (d) { return 2 + (d.core + d.reserve + d.potential) / 2; })
-    .attr("fill", "black")
+    .attr("r", function (d) { return d.potential == 0 ? 3 : d.potential; })
+    .attr("fill", function (d) { return d.potential == 0 ? "grey" : "black"; })
     .call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
       .on("end", dragended))
     .on("click", clicked)
+    .on("mouseover", handleMouseOver)
+    .on("mouseout", handleMouseOut);
 
 
   var circle2 = svg.append("g")
@@ -198,26 +199,38 @@ function drawRatings(error, graph) {
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-    .attr("r", function (d) { return 2 + (d.core + d.reserve) / 2; })
+    .attr("r", function (d) { return d.reserve; })
     .attr("fill", "yellow")
     .call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
       .on("end", dragended))
     .on("click", clicked)
+    .on("mouseover", handleMouseOver)
+    .on("mouseout", handleMouseOut);
 
   var circle3 = svg.append("g")
     .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
-    .attr("r", function (d) { return 2 + d.core / 2; })
+    .attr("r", function (d) { return d.core; })
     .attr("fill", "white")
     .call(d3.drag()
       .on("start", dragstarted)
       .on("drag", dragged)
       .on("end", dragended))
     .on("click", clicked)
+    .on("mouseover", handleMouseOver)
+    .on("mouseout", handleMouseOut);
+
+    function handleMouseOver(){
+      d3.event.target.setAttribute("class", "scaled")
+    }
+
+    function handleMouseOut(){
+      d3.event.target.removeAttribute("class", "scaled")
+    }
 
   link.append("title")
     .text(function (d) { return d.value > 0 ? d.value + "%" : null; })
@@ -281,9 +294,6 @@ function dragended(d) {
 
 // on circle click function
 function clicked(d) {
-  modal.style.display = "block"
-  modal.style.top = `${d3.event.clientY - 15}px`
-  modal.style.left = `${d3.event.clientX - -10}px`
   modal.style.background = "white"
   modal.style.color = "black"
   content.innerHTML = ` <div class="popover-content">
@@ -292,6 +302,17 @@ function clicked(d) {
                           <div class="pop-list"><a class="point-reserve">•</a><a> Резерв - ${d.reserve}</a></div>
                           <div class="pop-list"><a class="point-potential">•</a><a> Потенціал - ${d.potential}</a></div>
                         </div>`
+  if(window.innerWidth - d3.event.clientX > 200) {
+    modal.style.top = `${d3.event.clientY - 15}px`
+    modal.style.left = `${d3.event.clientX - -10}px`
+    d3.select("#myModal").classed("left-popup", false)
+  } else {
+    modal.style.top = `${d3.event.clientY - 15}px`
+    modal.style.left = `${d3.event.clientX - 200}px`
+    d3.select("#myModal").classed("left-popup", true)
+  }
+  modal.style.display = "block"
+  
 }
 
 // restore default zoom
@@ -331,7 +352,7 @@ var info = document.getElementsByClassName("info")[0]
 info.onclick = function () {
   legend.style.display = "block"
   legend.style.top = `40px`
-  legend.style.right = `2px`
+  legend.style.right = `20px`
   legend.style.background = "#282825"
   legend.style.color = "#d5d5d5"
 }
