@@ -191,7 +191,7 @@ function drawRatings(error, graph) {
       .on("end", dragended))
     .on("click", clicked)
     .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOut);
+    .on("mouseout", handleMouseOutPotential);
 
 
   var circle2 = svg.append("g")
@@ -207,7 +207,7 @@ function drawRatings(error, graph) {
       .on("end", dragended))
     .on("click", clicked)
     .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOut);
+    .on("mouseout", handleMouseOutReserve);
 
   var circle3 = svg.append("g")
     .attr("class", "nodes")
@@ -222,15 +222,32 @@ function drawRatings(error, graph) {
       .on("end", dragended))
     .on("click", clicked)
     .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOut);
+    .on("mouseout", handleMouseOutCore);
 
     function handleMouseOver(){
-      d3.event.target.setAttribute("class", "scaled")
+      console.log(d3.event)
+      d3.select(this).transition()
+        .attr("r", function(){ return parseInt(d3.event.target.attributes[0].value) + 10});
     }
 
-    function handleMouseOut(){
-      d3.event.target.removeAttribute("class", "scaled")
+    function handleMouseOutPotential(d){
+      d3.select(this).transition()
+    .attr("r", function(){return d.potential})
     }
+
+
+    function handleMouseOutCore(d){
+      d3.select(this).transition()
+    .attr("r", function(){return d.core})
+    }
+
+
+    function handleMouseOutReserve(d){
+      d3.select(this).transition()
+    .attr("r", function(){return d.reserve})
+    }
+
+
 
   link.append("title")
     .text(function (d) { return d.value > 0 ? d.value + "%" : null; })
