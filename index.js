@@ -178,11 +178,12 @@ function drawRatings(error, graph) {
     .enter().append("line")
 
   // Define circles
-  var node = svg.append("g")
+  var potential = svg.append("g")
     .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
+    .attr("class", function (d) { return d.id + " potential"; })
     .attr("r", function (d) { return d.potential == 0 ? 3 : d.potential; })
     .attr("fill", function (d) { return d.potential == 0 ? "grey" : "black"; })
     .call(d3.drag()
@@ -190,72 +191,30 @@ function drawRatings(error, graph) {
       .on("drag", dragged)
       .on("end", dragended))
     .on("click", clicked)
-    .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOutPotential);
+    .on("mouseenter", mouseEntered)
+    .on("mouseout", mouseOut);
 
-
-  var circle2 = svg.append("g")
+  var reserve = svg.append("g")
     .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
+    .attr("class", function (d) { return d.id + " reserve"; })
     .attr("r", function (d) { return d.reserve; })
     .attr("fill", "yellow")
-    .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended))
-    .on("click", clicked)
-    .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOutReserve);
 
-  var circle3 = svg.append("g")
+  var core = svg.append("g")
     .attr("class", "nodes")
     .selectAll("circle")
     .data(graph.nodes)
     .enter().append("circle")
+    .attr("class", function (d) { return d.id + " core"; })
     .attr("r", function (d) { return d.core; })
     .attr("fill", "white")
-    .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended))
-    .on("click", clicked)
-    .on("mouseover", handleMouseOver)
-    .on("mouseout", handleMouseOutCore);
-
-    function handleMouseOver(){
-      console.log(d3.event)
-      d3.select(this).transition()
-        .attr("r", function(){ return parseInt(d3.event.target.attributes[0].value) + 10});
-    }
-
-    function handleMouseOutPotential(d){
-      d3.select(this).transition()
-    .attr("r", function(){return d.potential})
-    }
-
-
-    function handleMouseOutCore(d){
-      d3.select(this).transition()
-    .attr("r", function(){return d.core})
-    }
-
-
-    function handleMouseOutReserve(d){
-      d3.select(this).transition()
-    .attr("r", function(){return d.reserve})
-    }
-
-
 
   link.append("title")
     .text(function (d) { return d.value > 0 ? d.value + "%" : null; })
-  node.append("title")
-    .text(function (d) { return d.name; })
-  circle2.append("title")
-    .text(function (d) { return d.name; })
-  circle3.append("title")
+  potential.append("title")
     .text(function (d) { return d.name; })
 
   simulation
@@ -274,15 +233,15 @@ function drawRatings(error, graph) {
       .attr("x2", function (d) { return d.target.x; })
       .attr("y2", function (d) { return d.target.y; });
 
-    node
+    potential
       .attr("cx", function (d) { return d.x; })
       .attr("cy", function (d) { return d.y; });
 
-    circle2
+    reserve
       .attr("cx", function (d) { return d.x; })
       .attr("cy", function (d) { return d.y; });
 
-    circle3
+    core
       .attr("cx", function (d) { return d.x; })
       .attr("cy", function (d) { return d.y; })
   }
@@ -330,6 +289,17 @@ function clicked(d) {
   }
   modal.style.display = "block"
   
+}
+
+function mouseEntered() {
+  console.log(d3.event);
+  d3.select(this).transition()
+    .attr("r", function(){ return parseInt(d3.event.target.attributes.r.value) + 10 });
+}
+
+function mouseOut(d) {
+  d3.select(this).transition()
+    .attr("r", function(){ return d.potential == 0 ? 3 : d.potential })
 }
 
 // restore default zoom
