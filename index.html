@@ -19,12 +19,12 @@
 
       .nodes circle {
         cursor: pointer;
-        pointer-events: all;
+        pointer-events: none;
         stroke: none;
         position: relative;
       }
-      .nodes circle.core, .nodes circle.reserve {
-        pointer-events: none;
+      .nodes circle.outline {
+        pointer-events: all;
       }
       .nodes circle.moving {
         cursor: grabbing;

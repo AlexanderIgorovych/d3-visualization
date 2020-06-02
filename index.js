@@ -178,6 +178,22 @@ function drawRatings(error, graph) {
     .enter().append("line")
 
   // Define circles
+  var outline = svg.append("g")
+    .attr("class", "nodes")
+    .selectAll("circle")
+    .data(graph.nodes)
+    .enter().append("circle")
+    .attr("class", function (d) { return d.id + " outline"; })
+    .attr("r", function (d) { return d.potential < 16 ? 16 : d.potential + 8; })
+    .attr("fill", "transparent")
+    .call(d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+    .on("click", clicked)
+    .on("mouseenter", mouseEntered)
+    .on("mouseout", mouseOut);
+
   var potential = svg.append("g")
     .attr("class", "nodes")
     .selectAll("circle")
@@ -186,13 +202,6 @@ function drawRatings(error, graph) {
     .attr("class", function (d) { return d.id + " potential"; })
     .attr("r", function (d) { return d.potential == 0 ? 3 : d.potential; })
     .attr("fill", function (d) { return d.potential == 0 ? "grey" : "black"; })
-    .call(d3.drag()
-      .on("start", dragstarted)
-      .on("drag", dragged)
-      .on("end", dragended))
-    .on("click", clicked)
-    .on("mouseenter", mouseEntered)
-    .on("mouseout", mouseOut);
 
   var reserve = svg.append("g")
     .attr("class", "nodes")
@@ -214,7 +223,7 @@ function drawRatings(error, graph) {
 
   link.append("title")
     .text(function (d) { return d.value > 0 ? d.value + "%" : null; })
-  potential.append("title")
+  outline.append("title")
     .text(function (d) { return d.name; })
 
   simulation
@@ -232,6 +241,10 @@ function drawRatings(error, graph) {
       .attr("y1", function (d) { return d.source.y; })
       .attr("x2", function (d) { return d.target.x; })
       .attr("y2", function (d) { return d.target.y; });
+
+    outline
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function (d) { return d.y; });
 
     potential
       .attr("cx", function (d) { return d.x; })
@@ -292,14 +305,11 @@ function clicked(d) {
 }
 
 function mouseEntered() {
-  console.log(d3.event);
-  d3.select(this).transition()
-    .attr("r", function(){ return parseInt(d3.event.target.attributes.r.value) + 10 });
+  d3.select(this).transition().attr("fill", "rgba(0, 0, 0, 0.1)");
 }
 
 function mouseOut(d) {
-  d3.select(this).transition()
-    .attr("r", function(){ return d.potential == 0 ? 3 : d.potential })
+  d3.select(this).transition().attr("fill", "transparent");
 }
 
 // restore default zoom
