@@ -15,10 +15,7 @@ var RATING_DATA = {
     { id: "party-12", name: "Партія 12", core: 0.4, reserve: 0.4, potential: 1.6 },
     { id: "party-13", name: "Партія 13", core: 4.6, reserve: 9.7, potential: 10.5 },
     { id: "party-14", name: "Партія 14", core: 3.1, reserve: 3.1, potential: 5.1 },
-    /*     { id: "party-15", name: "Партія 15", core: 1.6, reserve: 1.6, potential: 3.2 },
-        { id: "party-16", name: "Партія 16", core: 0.3, reserve: 0.3, potential: 0.3 }, */
     { id: "party-17", name: "Проти всіх", core: 0.0, reserve: 0.4, potential: 0.4 },
-    /*    { id: "party-18", name: "Не відповіли", core: 0.0, reserve: 0.8, potential: 0.8 }, */
   ],
   links: [
     { source: "party-1", target: "party-2", value: 0.7 },
@@ -181,6 +178,8 @@ function drawRatings(error, graph) {
     .selectAll("line")
     .data(graph.links)
     .enter().append("line")
+      .on("mouseenter", lineHovered)
+      .on("mouseout", lineOut);
 
   // Define circles
   var outline = svg.append("g")
@@ -226,8 +225,6 @@ function drawRatings(error, graph) {
     .attr("r", function (d) { return d.core; })
     .attr("fill", "white")
 
-  link.append("title")
-    .text(function (d) { return d.value > 0 ? d.value + "%" : null; })
   outline.append("title")
     .text(function (d) { return d.name; })
 
@@ -359,6 +356,8 @@ var modal = document.getElementById("myModal")
 
 var legend = document.getElementById("legend")
 
+var linePopup = document.getElementById("linePopup")
+
 // Get the <span> element that closes the modal
 var span = document.getElementsByClassName("close")[0]
 
@@ -387,4 +386,25 @@ info.onclick = function () {
   legend.style.right = `20px`
   legend.style.background = "#282825"
   legend.style.color = "#d5d5d5"
+}
+
+function lineHovered(d) {
+  if(d.value > 0){
+    linePopup.style.left = `${d3.event.clientX - -10}px`
+    linePopup.style.top = `${d3.event.clientY - 15}px`
+    linePopup.style.background = "white"
+    linePopup.style.color = "black"
+    linePopup.style.width = "fit-content"
+    linePopup.style.height = "fit-content"
+    linePopup.innerHTML = ` <div class="popover-content small">
+                                <p class="line-percent">${d.value}%</p>
+                              </div>`
+    setTimeout(function () {
+      linePopup.style.display = "block"
+    },100)
+  }
+}
+
+function lineOut() {
+  linePopup.style.display = "none"
 }

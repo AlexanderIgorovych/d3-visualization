@@ -16,7 +16,6 @@
       .links line.empty {
         stroke: rgba(0, 0, 0, 0.1);
       }
-
       .nodes circle {
         cursor: pointer;
         pointer-events: none;
@@ -51,6 +50,36 @@
         position: absolute;
         padding: 10px;
       }
+      
+      .linePopup{
+        display: none;
+        z-index: 1;
+        width: fit-content;
+        height: fit-content;
+        border: solid grey 1px;
+        background-color: #fcfcfc;
+        position: absolute;
+        font-size: 10px;
+        padding: 4px;
+      }
+
+      .line-percent{
+        font-size: 14px;
+      }
+
+      .linePopup:before {
+        content: ' ';
+        display: block;
+        height: 12px;
+        width: 12px;
+        left: -7px;
+        top: 10px;
+        border-bottom: solid grey 1px;
+        border-left: solid grey 1px;
+        background-color: #fcfcfc;
+        transform: rotate(45deg);
+        position: absolute;
+      } 
 
       .modal:before {
         content: ' ';
@@ -225,6 +254,15 @@
             <div class="pop-list"><a>Ядро - Опис</a></div>
             <div class="pop-list"><a> Резерв - Опис</a></div>
             <div class="pop-list"><a> Потенціал - Опис</a></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="linePopup" class="linePopup">
+      <div class="modal-content">
+        <div>
+          <div class="popover-content">
           </div>
         </div>
       </div>
