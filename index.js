@@ -149,16 +149,21 @@ var svgStatic = d3.select("svg")
   
 var svg = svgStatic.append("g")
   .attr("width", svgWrapper[0].clientWidth)
-  .attr("height", svgWrapper[0].clientHeight),
+  .attr("height", svgWrapper[0].clientHeight)
+  .on("mouseenter", freezeStrength),
   
 
 width = +svgStatic.attr("width"),
 height = +svgStatic.attr("height");
 
+var strength = -2500
+var strengthMin = -2800
+var strengthMax = -2200
+var strengthDir = -2
 
 var simulation = d3.forceSimulation()
   .force("link", d3.forceLink().id(function (d) { return d.id; }))
-  .force("charge", d3.forceManyBody().strength(-2000))
+  .force("charge", d3.forceManyBody().strength(-2500))
   .force("center", d3.forceCenter(width / 2, height / 2));
 
 // REPLACE THIS CALL WITH THE COMMENTED CODE BELOW AND SET URL WHICH RETRIEVES YOUR RATINGS
@@ -326,6 +331,29 @@ function defaultZoom() {
   );
 }
 
+function animateStrength() {
+  if (strengthDir != 0) {
+    strength += strengthDir;
+    if (strength <= strengthMin) {
+      strengthDir = 2
+    }
+    if (strength >= strengthMax) {
+      strengthDir = -2
+    }
+    simulation.force("charge").strength(strength);
+    simulation.alpha(0.3).restart();
+  }
+}
+
+function freezeStrength() {
+  if (strengthDir != 0) {
+    strength = -2500
+    strengthDir = 0
+    simulation.force("charge").strength(strength);
+    simulation.alpha(0.3).restart();
+  }
+}
+
 // Get the modal
 var modal = document.getElementById("myModal")
 
@@ -347,8 +375,9 @@ window.onclick = function(event) {
     modal.style.display = "none";
     legend.style.display = "none"
   }
- 
 }
+
+window.setInterval(animateStrength, 1500);
 
 var info = document.getElementsByClassName("info")[0]
 
