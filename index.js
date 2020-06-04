@@ -263,10 +263,14 @@ function drawRatings(error, graph) {
 }
 // END OF THE MAIN FUNCTION
 
+var dragging = false
+
 function dragstarted(d) {
   if (!d3.event.active) simulation.alphaTarget(0.3).restart();
   d3.select(this).classed("moving", true);
+  dragging = true;
   modal.style.display = "none";
+  linePopup.style.display = "none";
   d.fx = d.x;
   d.fy = d.y;
 }
@@ -279,12 +283,14 @@ function dragged(d) {
 function dragended(d) {
   if (!d3.event.active) simulation.alphaTarget(0);
   d3.select(this).classed("moving", false);
+  dragging = false;
   d.fx = null;
   d.fy = null;
 }
 
 // on circle click function
 function clicked(d) {
+  linePopup.style.display = "none"
   modal.style.background = "white"
   modal.style.color = "black"
   content.innerHTML = ` <div class="popover-content">
@@ -389,7 +395,7 @@ info.onclick = function () {
 }
 
 function lineHovered(d) {
-  if(d.value > 0){
+  if (d.value > 0 && !dragging) {
     linePopup.style.left = `${d3.event.clientX - -10}px`
     linePopup.style.top = `${d3.event.clientY - 15}px`
     linePopup.style.background = "white"
@@ -397,8 +403,8 @@ function lineHovered(d) {
     linePopup.style.width = "fit-content"
     linePopup.style.height = "fit-content"
     linePopup.innerHTML = ` <div class="popover-content small">
-                                <p class="line-percent">${d.value}%</p>
-                              </div>`
+                              <p class="line-percent">${d.value}%</p>
+                            </div>`
     setTimeout(function () {
       linePopup.style.display = "block"
     },100)
