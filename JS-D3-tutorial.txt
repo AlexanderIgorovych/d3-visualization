@@ -1,0 +1,125 @@
+Add D3 library to your index html file
+<script src="https://d3js.org/d3.v5.min.js"></script>
+
+D3 allows you to identify DOM elements using their CSS selector.
+D3 provides us with 2 methods for selection: d3.select() and d3.selectAll()
+d3.select() - returns the first element that matches the identifier
+d3.selectAll() -  returns all the elements that match the identifier
+After selection, you can manipulate, style, and bind data to the DOM element.
+
+Data Binding:
+With D3, you can load data into your DOM element with the .data() method which accepts your data as an argument.
+// define our data
+let RATING_DATA = {
+  nodes: [
+    { id: "party-1", name: "Партія 1", core: 3.0, reserve: 4.6, potential: 6.0 },
+    { id: "party-2", name: "Партія 2", core: 7.6, reserve: 16.5, potential: 25.5 },
+    { id: "party-3", name: "Партія 3", core: 0, reserve: 1.6, potential: 3.1 },
+  ],
+  links: [
+    { source: "party-1", target: "party-2", value: 0.7 },
+    { source: "party-1", target: "party-3", value: 0.0 },
+  ]
+}
+
+d3.selectAll('p')
+  .data(RATING_DATA)
+
+Data Visualization:
+
+For data visualization usually we use svg
+
+So for start  we need to add svg tag in your html file, select our svg tag and add width, height atributes
+
+someWrapper = d3.select(".wrapper-for-svg") // wrapper for define width, height of svg
+
+var svg = d3.select("svg")
+  .attr("width", someWrapper.clientWidth)
+  .attr("height", someWrapper.clientHeight)
+
+Now we create a new simulation
+
+var simulation = d3.forceSimulation()
+  .force("link", d3.forceLink().id(function (d) { return d.id; })) - for force our links simulation
+  .force("charge", d3.forceManyBody().strength(-2500)) - for define our strength
+  .force("center", d3.forceCenter(width / 2, height / 2)); -  for define center of our graph
+
+Create our function for draw graph
+
+function drawRatings(error, graph) {
+  if (error) throw error;
+
+// Define our links
+let link = svg.append("g") // define svg group
+        .attr("class", "links") // set class
+        .selectAll("line") // select all elements inside group
+        .data(graph.links) // set data
+        .enter().append("line") // add line inside group
+        .on("mouseenter", lineHovered) // add on mouse hover event
+        .on("mouseout", lineOut); // and on mouse out event
+
+// Define our circles
+var potential = svg.append("g") // define svg group
+    .attr("class", "nodes") 
+    .selectAll("circle") 
+    .data(graph.nodes) 
+    .enter().append("circle") // add circle inside group
+    .attr("class", function (d) { return d.id + " potential"; }) // set class for circles
+    .attr("r", function (d) { return d.potential == 0 ? 3 : d.potential; }) // set radus of circle
+    .attr("fill", function (d) { return d.potential == 0 ? "grey" : "black"; }) // set background color of circle
+    .call(d3.drag() // define drag event function
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended))
+
+// Define function for simulation of our graph
+function ticked() {
+// Add atributes for define our link position and length
+    link
+      .attr("stroke-width", function (d) { return d.value > 0 ? d.value * 2 : 1; }) // define width of line
+      .attr("class", function (d) { return d.value > 0 ? "" : "empty"; }) // add class for line
+      .attr("x1", function (d) { return d.source.x; })
+      .attr("y1", function (d) { return d.source.y; })
+      .attr("x2", function (d) { return d.target.x; })
+      .attr("y2", function (d) { return d.target.y; });
+
+// Add atributes for define our circle cx and cy position
+    potential
+      .attr("cx", function (d) { return d.x; })
+      .attr("cy", function (d) { return d.y; });
+  }
+// Add simulation event for draw our circles and links
+    simulation
+        .nodes(graph.nodes)
+        .on("tick", ticked);
+
+    simulation.force("link")
+        .links(graph.links);
+}
+
+After this we can define our drag functions
+var dragging = false
+
+function dragstarted(d) {
+  dragging = true;
+  d.fx = d.x;
+  d.fy = d.y;
+}
+
+function dragged(d) {
+  d.fx = d3.event.x;
+  d.fy = d3.event.y;
+}
+
+function dragended(d) {
+  if (!d3.event.active) simulation.alphaTarget(0);
+  d3.select(this).classed("moving", false);
+  dragging = false;
+  d.fx = null;
+  d.fy = null;
+}
+
+
+Now we can call our draw function
+
+drawRatings(null, RATING_DATA);
