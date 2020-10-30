@@ -195,8 +195,8 @@ function drawRatings(error, graph) {
       .on("drag", dragged)
       .on("end", dragended))
     .on("click", clicked)
-    .on("mouseenter", mouseEntered)
-    .on("mouseout", mouseOut);
+    .on("mouseenter", clicked)
+    .on("mouseout", close )
 
   var potential = svg.append("g")
     .attr("class", "nodes")
@@ -315,10 +315,11 @@ function clicked(d) {
     d3.select("#myModal").classed("bottom-popup", true)
   }
   modal.style.display = "block"
-  
+
+  d3.select(this).transition().attr("fill", "rgba(0, 0, 0, 0.1)");
 }
 
-function mouseEntered() {
+function mouseEntered(d) {
   d3.select(this).transition().attr("fill", "rgba(0, 0, 0, 0.1)");
 }
 
@@ -371,10 +372,12 @@ var span = document.getElementsByClassName("close")[0]
 var content = document.getElementsByClassName('modal-value')[0]
 
 // When the user clicks on <span> (x), close the modal
-span.onclick = function () {
-  modal.style.display = "none";
-}
+span.onclick = close()
 
+function close () {
+  modal.style.display = "none";
+  d3.select(this).transition().attr("fill", "transparent");
+}
 window.onclick = function(event) {
   if(event.target.localName !== "circle" && event.target.localName !== "span") {
     modal.style.display = "none";
